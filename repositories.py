@@ -3,7 +3,8 @@ import sqlite3
 from sqlite3 import Error
 from time import sleep
 
-'''Zmiana bazy danych'''
+'''Zmiana bazy danych
+podział na dwie tabele'''
 class ConnectSQLite:
 
     def create_connection(self):
