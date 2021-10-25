@@ -32,7 +32,8 @@ class ProjectRepository:
     def save_time(self, name, time):
         with self.conn as connection:
             cursor = connection.cursor()
-            cursor.execute('INSERT INTO Projects (`name`, `project_time`);'
+            cursor.execute('INSERT INTO Projects ('
+                           '`name`, `start_time`, `end_time`, `project_time`);'
                            'VALUES(?, ?)',
                            (name, time))
 
