@@ -66,9 +66,12 @@ class ProjectRepository:
 if __name__ == '__main__':
     # tabela = ProjectRepository().creat_table()
     # tabela_2 = ProjectRepository().creat_table_2()
+    stringa = ''
     with open('migrations/ini.sql', 'r') as file:
         for i in file:
+            stringa += i.strip()
             print(i.strip())
+    print(stringa.split(';'))
     # # ProjectRepository().creat_table()
     # inital_time = datetime.now()
     # sleep(10)
