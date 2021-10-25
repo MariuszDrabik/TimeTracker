@@ -3,8 +3,7 @@ import sqlite3
 from sqlite3 import Error
 from time import sleep
 
-'''Zmiana bazy danych
-podział na dwie tabele'''
+
 class ConnectSQLite:
 
     def create_connection(self):
@@ -30,22 +29,31 @@ class ProjectRepository:
             cursor.execute('SELECT `id`,`name`, `project_time` FROM Projects')
             return cursor.fetchall()
 
-
     def save_time(self, name, time):
         with self.conn as connection:
             cursor = connection.cursor()
-            cursor.execute("INSERT INTO Projects (`name`, `project_time`) VALUES(?, ?)",
+            cursor.execute('INSERT INTO Projects (`name`, `project_time`);'
+                           'VALUES(?, ?)',
                            (name, time))
-
 
     def creat_table(self):
         with self.conn as connection:
             cursor = connection.cursor()
-            cursor.execute('CREATE TABLE Track ( id integer PRIMARY KEY AUTOINCREMENT, '
+            cursor.execute('CREATE TABLE Track ( '
+                           'id integer PRIMARY KEY AUTOINCREMENT, '
                            'project_ID INTEGER, '
                            'start_time time, '
                            'end_time time, '
-                           'project_time TEXT)')
+                           'project_time TEXT);')
+            connection.commit()
+        print('Utworzono tabelę')
+
+    def creat_table_2(self):
+        with self.conn as connection:
+            cursor = connection.cursor()
+            cursor.execute('CREATE TABLE Project ('
+                                    'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+                                    'name TEXT)')
             connection.commit()
         print('Utworzono tabelę')
 
@@ -54,10 +62,11 @@ class ProjectRepository:
             cursor = c.cursor()
             cursor.execute('DROP TABLE IF EXISTS '+table+'')
 
-if __name__ == '__main__':
 
-    tabela = ProjectRepository().drop_table('Projects')
-    #
+if __name__ == '__main__':
+    tabela = ProjectRepository().creat_table()
+    tabela_2 = ProjectRepository().creat_table_2()
+
     print(tabela)
     # # ProjectRepository().creat_table()
     # inital_time = datetime.now()
