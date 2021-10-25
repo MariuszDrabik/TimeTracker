@@ -41,19 +41,22 @@ class ProjectRepository:
     def creat_table(self):
         with self.conn as connection:
             cursor = connection.cursor()
-            cursor.execute('CREATE TABLE IF NOT EXISTS Projects ('
-                           'id integer PRIMARY KEY AUTOINCREMENT, '
-                           'name text NOT NULL, '
-                           'begin_date text, '
-                           'end_date text, '
-                           'project_time time)')
+            cursor.execute('CREATE TABLE Track ( id integer PRIMARY KEY AUTOINCREMENT, '
+                           'project_ID INTEGER, '
+                           'start_time time, '
+                           'end_time time, '
+                           'project_time TEXT)')
             connection.commit()
-
         print('Utworzono tabelę')
+
+    def drop_table(self, table):
+        with self.conn as c:
+            cursor = c.cursor()
+            cursor.execute('DROP TABLE IF EXISTS '+table+'')
 
 if __name__ == '__main__':
 
-    tabela = ProjectRepository().select_all()
+    tabela = ProjectRepository().drop_table('Projects')
     #
     print(tabela)
     # # ProjectRepository().creat_table()
