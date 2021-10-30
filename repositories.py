@@ -6,7 +6,8 @@ from time import sleep
 
 class ConnectSQLite:
 
-    def create_connection(self):
+    @staticmethod
+    def create_connection():
         db_file = 'database/time.db'
         conn = None
         try:
@@ -17,8 +18,13 @@ class ConnectSQLite:
         finally:
             return conn
 
+    def drop_table(self, table):
+        with self.create_connection() as c:
+            cursor = c.cursor()
+            cursor.execute('DROP TABLE IF EXISTS ' + table + '')
 
-class ProjectRepository:
+
+class TrackRepository:
 
     def __init__(self):
         self.conn = ConnectSQLite().create_connection()
@@ -29,54 +35,44 @@ class ProjectRepository:
             cursor.execute('SELECT `id`,`name`, `project_time` FROM Projects')
             return cursor.fetchall()
 
-    def save_time(self, name, time):
+    def save(self, project_id, start_time, end_time, project_time):
         with self.conn as connection:
             cursor = connection.cursor()
-            cursor.execute('INSERT INTO Projects ('
-                           '`name`, `start_time`, `end_time`, `project_time`);'
-                           'VALUES(?, ?)',
-                           (name, time))
+            cursor.execute('INSERT INTO Track ('
+                           '`project_ID`, `start_time`, `end_time`, `project_time`);'
+                           'VALUES(?, ?, ?, ?)',
+                           (project_id, start_time, end_time, project_time))
 
-    def creat_table(self):
+
+class ProjectRepository:
+
+    def __init__(self):
+        self.conn = ConnectSQLite().create_connection()
+
+    def select_all(self):
         with self.conn as connection:
             cursor = connection.cursor()
-            cursor.execute('CREATE TABLE Track ( '
-                           'id integer PRIMARY KEY AUTOINCREMENT, '
-                           'project_ID INTEGER, '
-                           'start_time time, '
-                           'end_time time, '
-                           'project_time TEXT);')
+            cursor.execute('SELECT `id`,`name` FROM Projects')
+            return cursor.fetchall()
+
+    def get_id(self, name):
+        with self.conn as connection:
+            cursor = connection.cursor()
+            cursor.execute('SELECT `id` FROM Projects WHERE name=?', name)
+            return cursor.fetchone()
+
+    def save(self, name):
+        with self.conn as connection:
+            cursor = connection.cursor()
+            cursor.execute("INSERT INTO Projects (`name`) VALUES(?)", (name,))
             connection.commit()
-        print('Utworzono tabelę')
 
-    def creat_table_2(self):
-        with self.conn as connection:
-            cursor = connection.cursor()
-            cursor.execute('CREATE TABLE Project ('
-                                    'id INTEGER PRIMARY KEY AUTOINCREMENT,'
-                                    'name TEXT)')
-            connection.commit()
-        print('Utworzono tabelę')
-
-    def drop_table(self, table):
-        with self.conn as c:
-            cursor = c.cursor()
-            cursor.execute('DROP TABLE IF EXISTS '+table+'')
 
 
 if __name__ == '__main__':
-    # tabela = ProjectRepository().creat_table()
-    # tabela_2 = ProjectRepository().creat_table_2()
-    stringa = ''
-    with open('migrations/ini.sql', 'r') as file:
-        for i in file:
-            stringa += i.strip()
-            print(i.strip())
-    print(stringa.split(';'))
-    # # ProjectRepository().creat_table()
-    # inital_time = datetime.now()
-    # sleep(10)
-    # end_time = datetime.now() - inital_time
-    # print(end_time)
-    #
-    # ProjectRepository().save_time('projekt pierwszy', str(end_time))
+
+
+    project_name = 'Torun Dworce'
+
+    ProjectRepository().save(project_name)
+    print('ok')
