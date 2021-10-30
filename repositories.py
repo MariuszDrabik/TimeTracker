@@ -41,6 +41,7 @@ class TrackRepository:
             cursor.execute('INSERT INTO Tracks (`project_ID`, `start_time`, `end_time`, `project_time`) VALUES(?, ?, ?, ?)', (project_id, start_time, end_time, project_time))
             connection.commit()
 
+
 class ProjectRepository:
 
     def __init__(self):

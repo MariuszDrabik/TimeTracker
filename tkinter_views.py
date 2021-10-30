@@ -4,7 +4,13 @@ import tkinter as tk
 class MainView(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
+        self.master = master
         self.pack()
+        self.layout()
+
+    def layout(self):
+        self.master.geometry('500x510')
+        self.master.config(bg='white')
 
         self.entrythingy = tk.Entry()
         self.entrythingy.pack()
