@@ -32,8 +32,8 @@ class TrackRepository:
     def get_all(self):
         with self.conn as connection:
             cursor = connection.cursor()
-            cursor.execute('''SELECT Projects.name, start_time, end_time, 
-                           project_time FROM Tracks LEFT JOIN Projects ON 
+            cursor.execute('''SELECT Projects.name, start_time, end_time,
+                           project_time FROM Tracks LEFT JOIN Projects ON
                            Projects.id = project_ID''')
             return cursor.fetchall()
 
