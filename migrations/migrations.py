@@ -5,7 +5,7 @@ from sqlite3 import Error
 
 def read_ini_sql():
     query_string = ''
-    with open('ini.sql', 'r') as file:
+    with open('migrations/ini.sql', 'r') as file:
         for i in file:
             query_string += i.strip()
     return query_string.split(';')
@@ -43,7 +43,3 @@ if __name__ == '__main__':
             cursor = conn.cursor()
             cursor.execute(i)
             conn.commit()
-
-
-
-

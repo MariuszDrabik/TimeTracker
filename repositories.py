@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import sqlite3
 from sqlite3 import Error
 from time import sleep
@@ -32,13 +32,19 @@ class TrackRepository:
     def get_all(self):
         with self.conn as connection:
             cursor = connection.cursor()
-            cursor.execute('SELECT `id`,`name`, `project_time` FROM Projects')
+            cursor.execute('''SELECT Projects.name, start_time, end_time, 
+                           project_time FROM Tracks LEFT JOIN Projects ON 
+                           Projects.id = project_ID''')
             return cursor.fetchall()
 
     def save(self, project_id, start_time, end_time, project_time):
         with self.conn as connection:
             cursor = connection.cursor()
-            cursor.execute('INSERT INTO Tracks (`project_ID`, `start_time`, `end_time`, `project_time`) VALUES(?, ?, ?, ?)', (project_id, start_time, end_time, project_time))
+            cursor.execute(
+                'INSERT INTO Tracks ('
+                '`project_ID`, `start_time`, `end_time`, `project_time`)'
+                'VALUES(?, ?, ?, ?)',
+                (project_id, start_time, end_time, project_time))
             connection.commit()
 
 
@@ -70,25 +76,3 @@ class ProjectRepository:
 
 
 if __name__ == '__main__':
-    # ConnectSQLite().drop_table("Tracks")
-
-    start_time = datetime(2021, 10, 30, 9, 10, 00)
-    end_time = datetime.now()
-    delta_time = end_time - start_time
-    project_name = 'Toruń Dworce'
-
-    projects = ProjectRepository().get_all()
-    for i in projects:
-        id, name = i
-        print(type(id), name)
-
-    # project_name_id = ProjectRepository().get_id(project_name)
-    #
-    # TrackRepository().save(project_name_id, start_time, end_time, delta_time)
-    #
-    # tracking = TrackRepository().get_all()
-
-    # print(tracking)
-    print(start_time)
-    print(end_time)
-    print(delta_time)
