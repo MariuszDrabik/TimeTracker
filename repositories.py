@@ -73,6 +73,3 @@ class ProjectRepository:
                 return
             cursor.execute("INSERT INTO Projects (`name`) VALUES(?)", (name,))
             connection.commit()
-
-
-if __name__ == '__main__':
