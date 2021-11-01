@@ -1,6 +1,7 @@
+from datetime import datetime
 import tkinter as tk
 from repositories import TrackRepository, ProjectRepository
-from controlers import Project
+from controlers import Project, Time
 
 
 class MainView(tk.Frame):
@@ -12,6 +13,8 @@ class MainView(tk.Frame):
         self.layout()
         self.config_wigets()
         self.timer = False
+        self.start = 0
+        self.stop = 0
 
     def layout(self):
         self.master.geometry('600x710+0+0')
@@ -56,10 +59,15 @@ class MainView(tk.Frame):
     def show(self):
         if not self.timer:
             self.timer = True
+            self.start = datetime.now()
             self.start_button['text'] = 'STOP'
             print(self.project_pick.get().split()[0])
             return
         self.timer = False
+        self.end = datetime.now()
+        print(self.end, self.start)
+        print(Time(self.start, self.end)._total_seconds)
+        
         self.start_button['text'] = 'START'
         return
 
