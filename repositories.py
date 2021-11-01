@@ -1,7 +1,5 @@
-from datetime import datetime, timedelta
 import sqlite3
 from sqlite3 import Error
-from time import sleep
 
 
 class ConnectSQLite:

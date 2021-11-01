@@ -11,6 +11,7 @@ class MainView(tk.Frame):
         self.layout_config()
         self.layout()
         self.config_wigets()
+        self.timer = False
 
     def layout(self):
         self.master.geometry('600x710+0+0')
@@ -31,7 +32,7 @@ class MainView(tk.Frame):
         self.label_add = tk.Label(self.master, text='Dodaj projekt')
         self.label_add.grid(row=2, column=0, ipadx=2, ipady=2, pady=(20, 1), sticky='w')
         self.add_project_entry = tk.Entry(self.master)
-        self.add_project_entry.grid(row=3, column=0, ipadx=2, ipady=2, padx=20, pady=0, sticky='w')
+        self.add_project_entry.grid(row=3, column=0, ipadx=2, ipady=2, padx=25, pady=1, sticky='w')
 
     def config_wigets(self):
         self.master.configure(bg='#333', relief='flat', padx=10, pady=10)
@@ -39,7 +40,7 @@ class MainView(tk.Frame):
         self.start_button.config(**self.options, width=25,)
         self.menu.config(**self.options)
         self.label_add.config(**self.options_labels, width=15,)
-        self.add_project_entry.config(**self.options, width=25,)
+        self.add_project_entry.config(**self.options, width=29,)
 
     def layout_config(self):
         self.master.title('Time Tracker')
@@ -53,7 +54,14 @@ class MainView(tk.Frame):
                                    relief='flat', font=self.font_labels)
 
     def show(self):
-        print(self.project_pick.get().split()[0])
+        if not self.timer:
+            self.timer = True
+            self.start_button['text'] = 'STOP'
+            print(self.project_pick.get().split()[0])
+            return
+        self.timer = False
+        self.start_button['text'] = 'START'
+        return
 
     def add_project(self):
         print('dodano')
