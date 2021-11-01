@@ -2,6 +2,32 @@ from datetime import datetime, timedelta
 from repositories import ProjectRepository, TrackRepository
 
 
+class Time:
+    def __init__(self, start: datetime, stop: datetime):
+        self._start = start
+        self._stop = stop
+        self._total_seconds = self.seconds()
+
+    def __str__(self) -> str:
+        return str(timedelta(seconds=self._total_seconds))
+
+    def seconds(self):
+        self._total_seconds = (self._stop - self._start).total_seconds()
+        return self._total_seconds
+
+    def save(self):
+        return self._total_seconds
+
+
+class TimeDuration:
+    def __init__(self, time):
+        self._time = time
+
+    @classmethod
+    def form_data(cls, tracks: list):
+        return cls(sum(tracks))
+
+
 class Project:
     def get_all(self):
         return [f'{i[0]} {i[1]}' for i in ProjectRepository().get_all()]
@@ -18,31 +44,8 @@ class Tracks:
     def get_all_by_id(self):
         pass
 
-    def save(self, project_id, start_time, end_time, project_time):
+    def save(self, project_id, start_time, end_time, project_time: Time):
         TrackRepository().save(project_id, start_time, end_time, project_time)
-
-
-class Time:
-    def __init__(self, start: datetime, stop: datetime):
-        self._start = start
-        self._stop = stop
-        self._total_seconds = self.seconds()
-
-    def __str__(self) -> str:
-        return str(timedelta(seconds=self._total_seconds))
-
-    def seconds(self):
-        self._total_seconds = (self._stop - self._start).total_seconds()
-        return self._total_seconds
-
-
-class TimeDuration:
-    def __init__(self, time):
-        self._time = time
-
-    @classmethod
-    def form_data(cls, tracks: list):
-        return cls(sum(tracks))
 
 
 # ??timedelta??
@@ -86,11 +89,11 @@ class TimeParser:
         return cls(days, hours, minuts, seconds)
 
 
-if __name__ == '__main__':
-    s_time = datetime(2021, 11, 1, 6, 10, 11)
-    e_time = datetime(2021, 11, 1, 5, 36, 2)
+# if __name__ == '__main__':
+#     s_time = datetime(2021, 11, 1, 6, 10, 11)
+#     e_time = datetime(2021, 11, 1, 12, 36, 2)
 
-    Tracks().save(3, s_time, e_time, (e_time - s_time).total_seconds())
-    print((e_time - s_time).total_seconds())
-    print(timedelta(seconds=2759151.0))
-    print(TimeParser.from_timedelta_string(str(e_time - s_time)))
+#     Tracks().save(3, s_time, e_time, (e_time - s_time).total_seconds())
+#     print((e_time - s_time).total_seconds())
+#     print(timedelta(seconds=2759151.0))
+#     print(TimeParser.from_timedelta_string(str(e_time - s_time)))

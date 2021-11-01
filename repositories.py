@@ -71,3 +71,5 @@ class ProjectRepository:
                 return
             cursor.execute("INSERT INTO Projects (`name`) VALUES(?)", (name,))
             connection.commit()
+
+# ConnectSQLite().drop_table('Tracks')

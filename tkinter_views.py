@@ -1,7 +1,7 @@
 from datetime import datetime
 import tkinter as tk
 from repositories import TrackRepository, ProjectRepository
-from controlers import Project, Time
+from controlers import Project, Time, Tracks
 
 
 class MainView(tk.Frame):
@@ -20,25 +20,28 @@ class MainView(tk.Frame):
         self.master.geometry('600x710+0+0')
         self.master.config(bg='white')
         self.master.grid()
-        self.master.grid_columnconfigure((0, 1, 2), weight=1)
+        self.master.grid_columnconfigure((0, 1, ), weight=1)
 
         self.project_pick = tk.StringVar()
-        self.project_pick.set("Wybierz")
+        self.project_pick.set("Wybierz projekt")
 
+        self.label_info = tk.Label(self.master, text='Wybierz projekt:')
+        self.label_info.grid(row=0, column=0, padx=0, ipadx=0, pady=(22, 2),)
         self.drop_menu = tk.OptionMenu(self.master, self.project_pick, *self.projects)
         self.drop_menu.grid(row=1, column=0, padx=10, ipadx=2, ipady=2,)
         self.menu = self.master.nametowidget(self.drop_menu.menuname)
 
-        self.start_button = tk.Button(self.master, text='START', command=self.show)
+        self.start_button = tk.Button(self.master, text='START', command=self.timer_clock)
         self.start_button.grid(row=1, column=1, ipadx=2, ipady=2)
 
-        self.label_add = tk.Label(self.master, text='Dodaj projekt')
-        self.label_add.grid(row=2, column=0, ipadx=2, ipady=2, pady=(20, 1), sticky='w')
+        self.label_add = tk.Label(self.master, text='Dodaj projekt:')
+        self.label_add.grid(row=2, column=0, padx=0, ipadx=0, pady=(22, 2),)
         self.add_project_entry = tk.Entry(self.master)
-        self.add_project_entry.grid(row=3, column=0, ipadx=2, ipady=2, padx=25, pady=1, sticky='w')
+        self.add_project_entry.grid(row=3, column=0, padx=10, ipadx=2, ipady=2,)
 
     def config_wigets(self):
         self.master.configure(bg='#333', relief='flat', padx=10, pady=10)
+        self.label_info.config(**self.options_labels, width=15,)
         self.drop_menu.config(**self.options, width=25, highlightthickness=0)
         self.start_button.config(**self.options, width=25,)
         self.menu.config(**self.options)
@@ -53,21 +56,25 @@ class MainView(tk.Frame):
         self.bg = '#444'
         self.options = dict(bg=self.bg, fg=self.fg,
                             relief='flat', font=self.font)
-        self.options_labels = dict(bg='#333', fg=self.fg, 
+        self.options_labels = dict(bg='#333', fg=self.fg,
                                    relief='flat', font=self.font_labels)
 
-    def show(self):
-        if not self.timer:
+    def timer_clock(self):
+        if self.project_pick.get() == "Wybierz projekt":
+            self.label_info.config(text='Najpierw WYBIERZ', fg='#F00')
+            return
+        elif not self.timer:
+            self.label_info.config(text='Wybierz projekt z listy:', fg='#f1f1f1')
             self.timer = True
             self.start = datetime.now()
             self.start_button['text'] = 'STOP'
             print(self.project_pick.get().split()[0])
             return
         self.timer = False
+        project_id = self.project_pick.get().split()[0]
         self.end = datetime.now()
-        print(self.end, self.start)
-        print(Time(self.start, self.end)._total_seconds)
-        
+        time_diff = Time(self.start, self.end).save()
+        Tracks().save(project_id, self.start, self.end, time_diff)
         self.start_button['text'] = 'START'
         return
 
