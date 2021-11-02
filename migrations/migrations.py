@@ -5,7 +5,7 @@ from sqlite3 import Error
 
 def read_ini_sql():
     query_string = ''
-    with open('../migrations/ini.sql', 'r') as file:
+    with open('migrations/ini.sql', 'r') as file:
         for i in file:
             query_string += i.strip()
     return query_string.split(';')
@@ -33,7 +33,7 @@ def create_connection(db):
 
 if __name__ == '__main__':
     db_file = 'time.db'
-    dir_path = '../database'
+    dir_path = './database'
 
     database_dir_create(dir_path)
 
