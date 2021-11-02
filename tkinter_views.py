@@ -25,28 +25,34 @@ class MainView(tk.Frame):
         self.project_pick = tk.StringVar()
         self.project_pick.set("Wybierz projekt")
 
-        self.label_info = tk.Label(self.master, text='Wybierz projekt:')
-        self.label_info.grid(row=0, column=0, padx=0, ipadx=0, pady=(22, 2),)
-        self.drop_menu = tk.OptionMenu(self.master, self.project_pick, *self.projects)
-        self.drop_menu.grid(row=1, column=0, padx=10, ipadx=2, ipady=2,)
+        self.communication = tk.Label(self.master, text='CENTRUM KOMUNIKACJI')
+        self.communication.grid(row=0, columnspan=2, column=0, padx=0, ipadx=0, pady=(22, 2),)
+        self.option_label = tk.Label(self.master, text='Wybierz projekt:')
+        self.option_label.grid(row=1, column=0, padx=0, ipadx=0, pady=(22, 2),)
+        self.drop_menu = tk.OptionMenu(self.master, self.project_pick, *self.projects,)
+        self.drop_menu.grid(row=2, column=0, padx=10, ipadx=2, ipady=2,)
         self.menu = self.master.nametowidget(self.drop_menu.menuname)
 
         self.start_button = tk.Button(self.master, text='START', command=self.timer_clock)
-        self.start_button.grid(row=1, column=1, ipadx=2, ipady=2)
+        self.start_button.grid(row=2, column=1, ipadx=2, ipady=2)
 
         self.label_add = tk.Label(self.master, text='Dodaj projekt:')
-        self.label_add.grid(row=2, column=0, padx=0, ipadx=0, pady=(22, 2),)
+        self.label_add.grid(row=3, column=0, padx=0, ipadx=0, pady=(22, 2),)
         self.add_project_entry = tk.Entry(self.master)
-        self.add_project_entry.grid(row=3, column=0, padx=10, ipadx=2, ipady=2,)
+        self.add_project_entry.grid(row=4, column=0, padx=2, ipadx=2, ipady=5,)
+        self.add_button = tk.Button(self.master, text='Ddodaj przycisk', command=self.add_project)
+        self.add_button.grid(row=4, column=1, ipadx=2, ipady=2)
 
     def config_wigets(self):
         self.master.configure(bg='#333', relief='flat', padx=10, pady=10)
-        self.label_info.config(**self.options_labels, width=15,)
+        self.communication.config(**self.options, width=450,)
+        self.option_label.config(**self.options_labels, width=15,)
         self.drop_menu.config(**self.options, width=25, highlightthickness=0)
         self.start_button.config(**self.options, width=25,)
         self.menu.config(**self.options)
-        self.label_add.config(**self.options_labels, width=15,)
+        self.label_add.config(**self.options_labels, width=25,)
         self.add_project_entry.config(**self.options, width=29,)
+        self.add_button.config(**self.options, width=25,)
 
     def layout_config(self):
         self.master.title('Time Tracker')
@@ -61,10 +67,10 @@ class MainView(tk.Frame):
 
     def timer_clock(self):
         if self.project_pick.get() == "Wybierz projekt":
-            self.label_info.config(text='Najpierw WYBIERZ', fg='#F00')
+            self.option_label.config(text='Najpierw WYBIERZ', fg='#F00')
             return
         elif not self.timer:
-            self.label_info.config(text='Wybierz projekt z listy:', fg='#f1f1f1')
+            self.option_label.config(text='Wybierz projekt z listy:', fg='#f1f1f1')
             self.timer = True
             self.start = datetime.now()
             self.start_button['text'] = 'STOP'
@@ -79,7 +85,9 @@ class MainView(tk.Frame):
         return
 
     def add_project(self):
-        print('dodano')
+        name = self.add_project_entry.get()
+        Project().save(name)
+        print('Dodano:', name)
 
 
 if __name__ == '__main__':

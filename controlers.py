@@ -90,6 +90,9 @@ class TimeParser:
 
 
 # if __name__ == '__main__':
+#     Project().save('Jeden')
+#     Project().save('dwa')
+#     Project().save('Trzy')
 #     s_time = datetime(2021, 11, 1, 6, 10, 11)
 #     e_time = datetime(2021, 11, 1, 12, 36, 2)
 
