@@ -33,8 +33,10 @@ class Project:
         return [f'{i[0]} {i[1]}' for i in ProjectRepository().get_all()]
 
     def save(self, name):
+        if not name:
+            return 'Wprowadź nazwę'
         ProjectRepository().save(name)
-        return 1
+        return f'Wprowadzono {name}'
 
 
 class Tracks:
