@@ -26,7 +26,7 @@ class MainView(tk.Frame):
         self.project_pick.set("Wybierz projekt")
 
         self.communication = tk.Label(self.master, text='CENTRUM KOMUNIKACJI')
-        self.communication.grid(row=0, columnspan=2, column=0, padx=0, ipadx=0, pady=(22, 2),)
+        self.communication.grid(row=0, columnspan=2, column=0, padx=2, ipadx=0, pady=(22, 2),)
         self.option_label = tk.Label(self.master, text='Wybierz projekt:')
         self.option_label.grid(row=1, column=0, padx=0, ipadx=0, pady=(22, 2),)
         self.drop_menu = tk.OptionMenu(self.master, self.project_pick, *self.projects,)
