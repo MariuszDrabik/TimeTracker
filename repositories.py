@@ -26,6 +26,14 @@ class TrackRepository:
 
     def __init__(self):
         self.conn = ConnectSQLite().create_connection()
+        
+    def get_by_id(self, project_id):
+        with self.conn as connection:
+            cursor = connection.cursor()
+            cursor.execute(''' SELECT Projects.name, project_time FROM Tracks
+                           LEFT JOIN Projects ON Projects.id = project_ID WHERE
+                           Projects.id=?''', (project_id,))
+            return cursor.fetchall()
 
     def get_all(self):
         with self.conn as connection:
@@ -68,8 +76,10 @@ class ProjectRepository:
             cursor = connection.cursor()
             if self.get_id(name):
                 print("Projekt istniej wybierz inna nazwę")
-                return
+                return False
             cursor.execute("INSERT INTO Projects (`name`) VALUES(?)", (name,))
             connection.commit()
 
 # ConnectSQLite().drop_table('Tracks')
+
+# print(TrackRepository().get_by_id(3))

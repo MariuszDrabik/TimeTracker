@@ -43,7 +43,7 @@ class MainView(tk.Frame):
         self.label_add.grid(row=3, column=0, padx=0, ipadx=0, pady=(22, 2),)
         self.add_project_entry = tk.Entry(self.master)
         self.add_project_entry.grid(row=4, column=0, padx=2, ipadx=2, ipady=5,)
-        self.add_button = tk.Button(self.master, text='Ddodaj projekt',
+        self.add_button = tk.Button(self.master, text='DODAJ',
                                     command=self.add_project)
         self.add_button.grid(row=4, column=1, ipadx=2, ipady=2)
 
@@ -76,20 +76,19 @@ class MainView(tk.Frame):
             return
         elif not self.timer:
             self.communication.config(text='Rozpoczęto mierzenie')
-            
             self.timer = True
             self.start = datetime.now()
             self.start_button['text'] = 'STOP'
-            print(self.project_pick.get().split()[0])
+            print(self.project_pick.get())
             return
         self.timer = False
-        project_id = self.project_pick.get().split()[0]
+        project_id = Project().get_id_by_name(self.project_pick.get())
+        print(project_id)
         self.end = datetime.now()
         time_diff = Time(self.start, self.end).save()
         Tracks().save(project_id, self.start, self.end, time_diff)
         self.start_button['text'] = 'START'
         self.communication['text'] = 'Zakończono mierzenie'
-        
         return
 
     def add_project(self):
@@ -99,14 +98,16 @@ class MainView(tk.Frame):
         self.communication.config(text=comment)
         self.projects = Project().get_all()
         print('uzupelniono liste projektow')
-        self.add_project_entry.delete(0, 100)
-        self.communication.after(1000, self.default_textafter_20)
-        
-    def default_textafter_20(self):
-        print('sleep dont work')
-        sleep(5)
-        print('sleep dont work 2')
-        self.communication.config(text='CENTRUM KOMUNIKACJI', fg=self.fg)
+        self.add_project_entry.delete(0, "end")
+        self.update_project_list()
+
+    def update_project_list(self):
+        menu = self.drop_menu["menu"]
+        menu.delete(0, "end")
+        for project in self.projects:
+            menu.add_command(label=project,
+                             command=lambda i=project: self.option.set(i))
+
 
 if __name__ == '__main__':
     root = tk.Tk()

@@ -29,12 +29,18 @@ class TimeDuration:
 
 
 class Project:
+
+    def get_id_by_name(self, name):
+        return ProjectRepository().get_id(name)[0]
+
     def get_all(self):
-        return [f'{i[0]} {i[1]}' for i in ProjectRepository().get_all()]
+        return [f'{i[1]}' for i in ProjectRepository().get_all()]
 
     def save(self, name):
         if not name:
             return 'Wprowadź nazwę'
+        elif ProjectRepository().save(name) is False:
+            return '!!!Projekt istnieje!!!'
         ProjectRepository().save(name)
         return f'Wprowadzono {name}'
 
@@ -43,14 +49,28 @@ class Tracks:
     def get_all(self):
         return TrackRepository().get_all()
 
-    def get_all_by_id(self):
-        pass
+    def get_all_by_id(self, project_id):
+        return TrackRepository().get_by_id(project_id)
 
     def save(self, project_id, start_time, end_time, project_time: Time):
         TrackRepository().save(project_id, start_time, end_time, project_time)
 
+    def get_summary_time_list(self) -> list:
+        return [[k, v] for k, v in self.get_summary_time_dict().items()]
 
-# ??timedelta??
+    def get_summary_time_dict(self) -> dict:
+        tracks = Tracks().get_all()
+        project_time = {}
+        for i in tracks:
+            tmp = 0
+            for j in tracks:
+                if j[0] == i[0]:
+                    tmp += j[-1]
+            project_time[i[0]] = tmp
+        return project_time
+
+
+# Narazie nie potrzebne
 class TimeParser:
     def __init__(self, days, hours, minuts, seconds):
         self.days = days
@@ -91,14 +111,16 @@ class TimeParser:
         return cls(days, hours, minuts, seconds)
 
 
-# if __name__ == '__main__':
-#     Project().save('Jeden')
-#     Project().save('dwa')
-#     Project().save('Trzy')
-#     s_time = datetime(2021, 11, 1, 6, 10, 11)
-#     e_time = datetime(2021, 11, 1, 12, 36, 2)
+if __name__ == '__main__':
 
-#     Tracks().save(3, s_time, e_time, (e_time - s_time).total_seconds())
-#     print((e_time - s_time).total_seconds())
-#     print(timedelta(seconds=2759151.0))
-#     print(TimeParser.from_timedelta_string(str(e_time - s_time)))
+    tracks = Tracks().get_all()
+
+    project_time = []
+    for i in tracks:
+        tmp = 0
+        for j in tracks:
+            if j[0] == i[0]:
+                tmp += j[-1]
+        print([i[0], tmp])
+        project_time.append([i[0], tmp])
+    print(Tracks().get_summary_time_list())
