@@ -26,7 +26,7 @@ class TrackRepository:
 
     def __init__(self):
         self.conn = ConnectSQLite().create_connection()
-        
+
     def get_by_id(self, project_id):
         with self.conn as connection:
             cursor = connection.cursor()
