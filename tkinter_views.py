@@ -1,7 +1,7 @@
 from datetime import datetime
 from time import sleep
 import tkinter as tk
-from controlers import Project, Time, Tracks
+from controlers import Project, Time, Tracks, Clock
 
 
 class MainView(tk.Frame):
@@ -15,6 +15,7 @@ class MainView(tk.Frame):
         self.timer = False
         self.start = 0
         self.stop = 0
+        self.clock = 0
 
     def layout(self):
         self.master.geometry('600x710+0+0')
@@ -46,6 +47,9 @@ class MainView(tk.Frame):
         self.add_button = tk.Button(self.master, text='DODAJ',
                                     command=self.add_project)
         self.add_button.grid(row=4, column=1, ipadx=2, ipady=2)
+        self.clock_label = tk.Label(self.master, text='0:00:00')
+        self.clock_label.grid(row=5, column=0, columnspan=2, ipadx=10, ipady=10,
+                        padx=20, pady=20)
 
     def config_wigets(self):
         self.master.configure(bg='#333', relief='flat', padx=10, pady=10)
@@ -57,10 +61,13 @@ class MainView(tk.Frame):
         self.label_add.config(**self.options_labels, width=25,)
         self.add_project_entry.config(**self.options, width=29,)
         self.add_button.config(**self.options, width=25,)
+        self.clock_label.config(bg=self.bg, fg=self.fg, relief='flat',
+                          font=self.font_clock, width=25,)
 
     def layout_config(self):
         self.master.title('Time Tracker')
         self.font = ('helvetica', 12)
+        self.font_clock = ('PT Mono', 25)
         self.font_labels = ('helvetica', 11, 'italic')
         self.fg = '#f1f1f1'
         self.bg = '#444'
@@ -72,7 +79,7 @@ class MainView(tk.Frame):
     def timer_clock(self):
         if self.project_pick.get() == "Wybierz projekt":
             self.communication.config(text='Najpierw WYBIERZ', fg='#F00')
-            self.default_textafter_20()
+            self.communication.after(5000, self.default_comunicator_setter)
             return
         elif not self.timer:
             self.communication.config(text='Rozpoczęto mierzenie')
@@ -80,6 +87,8 @@ class MainView(tk.Frame):
             self.start = datetime.now()
             self.start_button['text'] = 'STOP'
             print(self.project_pick.get())
+            self.clock_shower()
+            self.communication.after(10000, self.default_comunicator_setter)
             return
         self.timer = False
         project_id = Project().get_id_by_name(self.project_pick.get())
@@ -89,7 +98,7 @@ class MainView(tk.Frame):
         Tracks().save(project_id, self.start, self.end, time_diff)
         self.start_button['text'] = 'START'
         self.communication['text'] = 'Zakończono mierzenie'
-        return
+        self.communication.after(10000, self.default_comunicator_setter)
 
     def add_project(self):
         name = self.add_project_entry.get()
@@ -106,7 +115,19 @@ class MainView(tk.Frame):
         menu.delete(0, "end")
         for project in self.projects:
             menu.add_command(label=project,
-                             command=lambda i=project: self.option.set(i))
+                             command=lambda i=project: self.project_pick.set(i))
+
+    def clock_shower(self):
+        if self.timer:
+            print(Clock.timing(self.clock))
+            self.clock_label.config(text=Clock.timing(self.clock))
+            self.clock_label.after(1000, self.clock_shower)
+            self.clock += 1
+            return
+        self.clock = 0
+
+    def default_comunicator_setter(self):
+        self.communication.config(text='CENTRUM KOMUNIKACJI', fg=self.fg)
 
 
 if __name__ == '__main__':

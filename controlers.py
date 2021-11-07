@@ -19,13 +19,10 @@ class Time:
         return self._total_seconds
 
 
-class TimeDuration:
-    def __init__(self, time):
-        self._time = time
-
-    @classmethod
-    def form_data(cls, tracks: list):
-        return cls(sum(tracks))
+class Clock:
+    @staticmethod
+    def timing(seconds):
+        return timedelta(seconds=seconds)
 
 
 class Project:
@@ -66,11 +63,11 @@ class Tracks:
             for j in tracks:
                 if j[0] == i[0]:
                     tmp += j[-1]
-            project_time[i[0]] = tmp
+            project_time[i[0]] = str(timedelta(seconds=round(tmp)))
         return project_time
 
 
-# Narazie nie potrzebne
+# Narazie nie potrzebne-> timdelta załatwia to za mnie
 class TimeParser:
     def __init__(self, days, hours, minuts, seconds):
         self.days = days
@@ -124,3 +121,5 @@ if __name__ == '__main__':
         print([i[0], tmp])
         project_time.append([i[0], tmp])
     print(Tracks().get_summary_time_list())
+
+    print(Clock.timing(1980.494344))
