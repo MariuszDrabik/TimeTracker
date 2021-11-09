@@ -5,11 +5,7 @@ __pycache__/
 .pyc
 identifier.sqlite
 .identifier.sqlite
-.vscode
-.idea
-/vscode
-/idea
-.vscode/
-.idea/
-/.vscode
-/.idea
+
+.vscode/    
+.vscode/*    
+.vscode/**    
