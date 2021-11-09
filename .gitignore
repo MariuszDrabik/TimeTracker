@@ -11,3 +11,4 @@ identifier.sqlite
 .vscode/**    
 summary.csv
 *.csv
+*.ico

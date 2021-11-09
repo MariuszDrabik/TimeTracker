@@ -163,8 +163,14 @@ class MainView(tk.Frame):
     def migrations(self):
         Migrations.make_database_migration()
 
+    def do_nothing(self):
+        self.timer_clock()
+        self.master.destroy()
+        print('zapisane i ubite :P')
+
 
 if __name__ == '__main__':
     root = tk.Tk()
     myapp = MainView(root)
+    root.protocol('WM_DELETE_WINDOW', MainView(root).do_nothing)
     myapp.mainloop()
