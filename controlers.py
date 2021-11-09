@@ -1,4 +1,7 @@
+import csv
 from datetime import datetime, timedelta
+
+from migrations.migrations import make_database
 from repositories import ProjectRepository, TrackRepository
 
 
@@ -19,10 +22,18 @@ class Time:
         return self._total_seconds
 
 
-class Clock:
+class Clock:  # only for not importing unessery stuff to main
     @staticmethod
     def timing(seconds):
         return timedelta(seconds=seconds)
+
+    @staticmethod
+    def starting_track():
+        return datetime.now()
+
+    @staticmethod
+    def endinging_track():
+        return datetime.now()
 
 
 class Project:
@@ -31,6 +42,9 @@ class Project:
         return ProjectRepository().get_id(name)[0]
 
     def get_all(self):
+        all_projets = [f'{i[1]}' for i in ProjectRepository().get_all()]
+        if not all_projets:
+            return ['Dodaj projekt poniżej']
         return [f'{i[1]}' for i in ProjectRepository().get_all()]
 
     def save(self, name):
@@ -48,6 +62,17 @@ class Tracks:
 
     def get_all_by_id(self, project_id):
         return TrackRepository().get_by_id(project_id)
+
+    def show_time_for_current(self, project_id):
+        try:
+            all_time = self.get_all_by_id(project_id)
+            name = all_time[0][0]
+            time = 0
+            for i in all_time:
+                time += i[1]
+            return f'{name}: {timedelta(seconds=round(time))}'
+        except IndexError:
+            return 'Dla tego projektu brak śledzenia'
 
     def save(self, project_id, start_time, end_time, project_time: Time):
         TrackRepository().save(project_id, start_time, end_time, project_time)
@@ -67,7 +92,21 @@ class Tracks:
         return project_time
 
 
-# Narazie nie potrzebne-> timdelta załatwia to za mnie
+class Data:
+    @staticmethod
+    def saving_to_csv():
+        table = [['name', 'time']]
+        tracks = Tracks().get_summary_time_list()
+        print(tracks)
+        for track in tracks:
+            table.append(track)
+        with open('summary.csv', 'w', newline='', ) as file:
+            save = csv.writer(file, dialect='excel', delimiter=';')
+            for row in table:
+                save.writerow(row)
+
+
+# Narazie nie potrzebne-> timdelta załatwia to za mnie zostawie może sie przyda
 class TimeParser:
     def __init__(self, days, hours, minuts, seconds):
         self.days = days
@@ -108,18 +147,8 @@ class TimeParser:
         return cls(days, hours, minuts, seconds)
 
 
-if __name__ == '__main__':
+class Migrations:
 
-    tracks = Tracks().get_all()
-
-    project_time = []
-    for i in tracks:
-        tmp = 0
-        for j in tracks:
-            if j[0] == i[0]:
-                tmp += j[-1]
-        print([i[0], tmp])
-        project_time.append([i[0], tmp])
-    print(Tracks().get_summary_time_list())
-
-    print(Clock.timing(1980.494344))
+    @staticmethod
+    def make_database_migration():
+        make_database()

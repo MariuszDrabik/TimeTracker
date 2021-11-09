@@ -3,3 +3,13 @@
 __pycache__/
 /__pycache__
 .pyc
+identifier.sqlite
+.identifier.sqlite
+.vscode
+.idea
+/vscode
+/idea
+.vscode/
+.idea/
+/.vscode
+/.idea

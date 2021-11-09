@@ -79,7 +79,3 @@ class ProjectRepository:
                 return False
             cursor.execute("INSERT INTO Projects (`name`) VALUES(?)", (name,))
             connection.commit()
-
-# ConnectSQLite().drop_table('Tracks')
-
-# print(TrackRepository().get_by_id(3))
