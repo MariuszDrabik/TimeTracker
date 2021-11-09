@@ -79,3 +79,7 @@ class ProjectRepository:
                 return False
             cursor.execute("INSERT INTO Projects (`name`) VALUES(?)", (name,))
             connection.commit()
+
+
+if __name__ == '__main__':
+    pass

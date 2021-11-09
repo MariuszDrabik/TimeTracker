@@ -1,5 +1,7 @@
+from os import system
+import os
 import tkinter as tk
-from controlers import Data, Project, Time, Tracks, Clock, Migrations
+from controlers import Data, Migrations, Project, Time, Tracks, Clock
 
 
 class MainView(tk.Frame):
@@ -17,7 +19,7 @@ class MainView(tk.Frame):
         self.clock = 0
 
     def layout(self):
-        self.master.geometry('600x710+0+0')
+        self.master.geometry('600x450+0+0')
         self.master.config(bg='white')
         self.master.grid()
         self.master.grid_columnconfigure((0, 1, ), weight=1)
@@ -79,6 +81,8 @@ class MainView(tk.Frame):
 
     def layout_config(self):
         self.master.title('Time Tracker')
+        self.master.iconbitmap(self.resource_path('./icon/timer.ico'))
+
         self.font = ('helvetica', 12)
         self.font_clock = ('PT Mono', 25)
         self.font_labels = ('helvetica', 11, 'italic')
@@ -168,9 +172,19 @@ class MainView(tk.Frame):
         self.master.destroy()
         print('zapisane i ubite :P')
 
+    def resource_path(self, relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = system._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
+
 
 if __name__ == '__main__':
     root = tk.Tk()
     myapp = MainView(root)
-    root.protocol('WM_DELETE_WINDOW', MainView(root).do_nothing)
+    root.protocol('WM_DELETE_WINDOW', myapp.do_nothing)
     myapp.mainloop()
