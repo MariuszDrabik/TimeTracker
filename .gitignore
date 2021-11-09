@@ -9,3 +9,4 @@ identifier.sqlite
 .vscode/    
 .vscode/*    
 .vscode/**    
+.csv
