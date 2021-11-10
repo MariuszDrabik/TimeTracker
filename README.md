@@ -1,3 +1,5 @@
 <h1>TimeTracker</h1>
 
-<p>Simple project/activity tracker writed in python with GUI in tkinter</p>
+<p>Simply project/activity tracker written in python with GUI in tkinter</p>
+
+<p>Tou are using it on Your own risik :P</p>
