@@ -12,3 +12,5 @@ identifier.sqlite
 summary.csv
 *.csv
 *.ico
+.idea
+.idea"

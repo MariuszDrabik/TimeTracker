@@ -19,13 +19,13 @@ class ConnectSQLite:
     def drop_table(self, table):
         with self.create_connection() as c:
             cursor = c.cursor()
-            cursor.execute('DROP TABLE IF EXISTS ' + table + '')
+            cursor.execute(f'DROP TABLE IF EXISTS {table}')
 
 
 class TrackRepository:
 
     def __init__(self):
-        self.conn = ConnectSQLite().create_connection()
+        self.conn = ConnectSQLite.create_connection()
 
     def get_by_id(self, project_id):
         with self.conn as connection:
