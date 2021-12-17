@@ -2,7 +2,7 @@ from os import system
 import os
 import tkinter as tk
 from controlers import Data, Migrations, Project, Time, Tracks, Clock
-# okokoko
+
 
 class MainView(tk.Frame):
     def __init__(self, master):
