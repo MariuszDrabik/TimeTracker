@@ -173,7 +173,7 @@ class MainView(tk.Frame):
         print('zapisane i ubite :P')
 
     def resource_path(self, relative_path):
-        """ Get absolute path to resource, works for dev and for PyInstaller """
+        """ Get absolute path to resource"""
         try:
             # PyInstaller creates a temp folder and stores path in _MEIPASS
             base_path = system._MEIPASS
