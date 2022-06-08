@@ -9,7 +9,7 @@ class Time:
     def __init__(self, start: datetime, stop: datetime):
         self._start = start
         self._stop = stop
-        self._total_seconds = self.seconds()
+        self.seconds()
 
     def __str__(self) -> str:
         return str(timedelta(seconds=self._total_seconds))
@@ -45,7 +45,7 @@ class Project:
         all_projets = [f'{i[1]}' for i in ProjectRepository().get_all()]
         if not all_projets:
             return ['Dodaj projekt poniżej']
-        return [f'{i[1]}' for i in ProjectRepository().get_all()]
+        return all_projets
 
     def save(self, name):
         if not name:

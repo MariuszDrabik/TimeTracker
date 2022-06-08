@@ -81,7 +81,7 @@ class MainView(tk.Frame):
 
     def layout_config(self):
         self.master.title('Time Tracker')
-        self.master.iconbitmap(self.resource_path('./icon/timer.ico'))
+        # self.master.iconbitmap(self.resource_path('./icon/timer.ico'))
 
         self.font = ('helvetica', 12)
         self.font_clock = ('PT Mono', 25)
